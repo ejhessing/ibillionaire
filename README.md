@@ -15,5 +15,4 @@
   - python ETF_trading_system.py
 
 # Issue
-	1. RE not get the Portfolio Value yet
-	2. the portfolio percentage does not match, but it is designer's problem, I can't fix
+	the portfolio percentage does not match, but it is designer's problem, I can't fix
