@@ -9,10 +9,12 @@
 	3. pip install -r requirements.txt
 
 # Execution
-	input a number 0 ~ 15
-	other parameters will quit
+	V1: input a number 0 ~ 15, other parameters will quit
+	V2: output a json file
+
 ### Start
   - python ETF_trading_system.py
+  - python ETF_trading_systemV2.py
 
 # Issue
 	the portfolio percentage does not match, but it is designer's problem, I can't fix
