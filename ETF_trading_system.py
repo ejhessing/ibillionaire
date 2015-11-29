@@ -3,8 +3,6 @@ import re
 import requests
 
 
-url = ""
-name = ""
 header = {
     'cookie': '__utmt=1; _hjUserId=616c6415-761e-30fa-b733-1652b38ca9b2; csrftoken=yyhYiazr254BNO8XYYB166LtfZePf2kc; __utma=94914500.1425706763.1448673958.1448673958.1448673958.1; __utmb=94914500.2.10.1448673958; __utmc=94914500; __utmz=94914500.1448673958.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36'}
@@ -70,9 +68,10 @@ while True:
         print "Exception: " + str(e)
         quit()
 
-    # user re to retract Portfolio Value, not finish yet
-    # value = re.search("<h2>*B", res.text)
-    # print value
+    # user re to retract Portfolio Value
+    match = re.search('\<h2\>([0-9]*.)', res.text)
+    if match:
+        value = match.group(0)
 
     # use re to extract types and percentages
     m = re.search("data: eval\('\[(.*)\]'", res.text)
@@ -83,5 +82,6 @@ while True:
 
     # final result
     print name + ":"
+    print "Portfolio Value: " + str(value[4:-1]) + " billions"
     for i in range(int(len(m3)/2)):
         print (m3[2*i], round(float(m3[2*i + 1]), 2))
