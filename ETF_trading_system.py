@@ -72,6 +72,8 @@ while True:
     match = re.search('\<h2\>([0-9]*.)', res.text)
     if match:
         value = match.group(0)
+    else:
+        value = "not get Portfolio Value"
 
     # use re to extract types and percentages
     m = re.search("data: eval\('\[(.*)\]'", res.text)
@@ -81,7 +83,7 @@ while True:
     m3 = m2.split(",")
 
     # final result
-    print name + ":"
+    print name
     print "Portfolio Value: " + str(value[4:-1]) + " billions"
     for i in range(int(len(m3)/2)):
         print (m3[2*i], round(float(m3[2*i + 1]), 2))
