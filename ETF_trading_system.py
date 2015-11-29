@@ -86,4 +86,4 @@ while True:
     print name
     print "Portfolio Value: " + str(value[4:-1]) + " billions"
     for i in range(int(len(m3)/2)):
-        print (m3[2*i], round(float(m3[2*i + 1]), 2))
+        print (m3[2*i][1:-1], round(float(m3[2*i + 1]), 2))
