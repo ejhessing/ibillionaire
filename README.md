@@ -1,4 +1,6 @@
 # ibillionaire
+# User Statement
+	When you use , you agree to all of the results must be responsible for your own
 # Install
 
 ### Python Package
@@ -10,8 +12,8 @@
 	input a number 0 ~ 15
 	other parameters will quit
 ### Start
-  - python ETF_trading_system
+  - python ETF_trading_system.py
 
 # Issue
-	RE not get the Portfolio Value
-	the portfolio percentage does not match at all, but it is designer's problem, and the difference is small (about 1%), I won't
+	1. RE not get the Portfolio Value yet
+	2. the portfolio percentage does not match, but it is designer's problem, I can't fix
