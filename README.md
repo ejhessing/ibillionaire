@@ -1,4 +1,8 @@
 # ibillionaire
+# Purpose
+	crawl the data of http://www.ibillionaire.me/billionaires/
+	v1: input a number to get each billionaire investor's portfolio, such as Warren Buffett = 0
+	v2: based on stock types to get a summary of all billionaire investors' portfolio, export to json
 # User Statement
 	When you use , you agree to all of the results must be responsible for your own
 # Install
