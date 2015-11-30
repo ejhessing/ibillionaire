@@ -6,6 +6,12 @@ import requests
 header = {
     'cookie': '__utmt=1; _hjUserId=616c6415-761e-30fa-b733-1652b38ca9b2; csrftoken=yyhYiazr254BNO8XYYB166LtfZePf2kc; __utma=94914500.1425706763.1448673958.1448673958.1448673958.1; __utmb=94914500.2.10.1448673958; __utmc=94914500; __utmz=94914500.1448673958.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36'}
+
+print "It is sorting by their Portfolio Value..."
+print "0: Warren Buffett, 1: Carl Icahn, 2: George Soros, 3: Ray Dalio, 4: John Paulson, 5: David Tepper"
+print "6: Leon Cooperman, 7: Julian Robertson, 8: Daniel Loeb, 9: Steve Mandel, 10: Nelson Peltz"
+print "11: Larry Robbins, 12: Bill Ackman, 13: David Einhorn, 14: Chase Coleman, 15: Richard Chilton"
+
 while True:
     ib = raw_input("Input a number between 0 ~ 15: (empty , other numbers or text will quit): ")
     if ib == str(0):
