@@ -4,6 +4,7 @@ import requests
 import os
 import time
 import json
+import operator
 from pprint import pprint
 
 if not os.path.exists("output"):
@@ -114,7 +115,8 @@ dic = {"ConsumerStaples": ConsumerStaples / 100, "Financials": Financials / 100,
        "Health": Health / 100, "Telecommunications": Telecommunications / 100, "Materials": Materials / 100,
        "Utilities": Utilities / 100
        }
-pprint(dic)
+sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
+pprint(sorted_dic)
 with open("output/output.json", "w") as js:
-    json.dump(dic, js)
+    json.dump(sorted_dic, js)
 print "All done"
