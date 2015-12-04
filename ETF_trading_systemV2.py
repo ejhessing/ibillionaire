@@ -63,10 +63,13 @@ for i in range(0, len(urls)):
         value_str = match.group(0)
         if value_str[-1] == 'M':
             p_value = float(value_str[4:-1]) / 1000
-        else:
+        elif value_str[-1] == 'B':
             p_value = float(value_str[4:-1])
+        else:
+            print "not get Portfolio Value"
+            p_value = 0
     else:
-        value_str = "not get Portfolio Value"
+        print "not get Portfolio Value"
         p_value = 0
 
     # use re to extract types and percentages

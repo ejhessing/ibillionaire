@@ -80,10 +80,14 @@ while True:
         value = match.group(0)
         if value[-1] == 'M':
             p_value = float(value[4:-1]) / 1000
-        else:
+        elif value[-1] == 'B':
             p_value = float(value[4:-1])
+        else:
+            print "not get Portfolio Value"
+            p_value = 0
     else:
-        value = "not get Portfolio Value"
+        print "not get Portfolio Value"
+        p_value = 0
 
     # use re to extract types and percentages
     m = re.search("data: eval\('\[(.*)\]'", res.text)
