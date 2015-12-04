@@ -61,10 +61,13 @@ for i in range(0, len(urls)):
     match = re.search('\<h2\>([0-9]*.)', res.text)
     if match:
         value_str = match.group(0)
-        value = float(value_str[4:-1])
+        if value_str[-1] == 'M':
+            p_value = float(value_str[4:-1]) / 1000
+        else:
+            p_value = float(value_str[4:-1])
     else:
         value_str = "not get Portfolio Value"
-        value = 0
+        p_value = 0
 
     # use re to extract types and percentages
     m = re.search("data: eval\('\[(.*)\]'", res.text)
@@ -78,34 +81,34 @@ for i in range(0, len(urls)):
         percentage = round(float(m3[2 * i + 1]), 2)
 
         if type == u'ConsumerStaples':
-            ConsumerStaples += value * percentage
+            ConsumerStaples += p_value * percentage
             # print "ConsumerStaples: " + str(ConsumerStaples)
         elif type == u'Financials':
-            Financials += value * percentage
+            Financials += p_value * percentage
             # print "Financials: " + str(Financials)
         elif type == u'Technology':
-            Technology += value * percentage
+            Technology += p_value * percentage
             # print "Technology: " + str(Technology)
         elif type == u'ConsumerDiscretionary':
-            ConsumerDiscretionary += value * percentage
+            ConsumerDiscretionary += p_value * percentage
             # print "ConsumerDiscretionary: " + str(ConsumerDiscretionary)
         elif type == u'Energy':
-            Energy += value * percentage
+            Energy += p_value * percentage
             # print "Energy: " + str(Energy)
         elif type == u'Industrials':
-            Industrials += value * percentage
+            Industrials += p_value * percentage
             # print "Industrials: " + str(Industrials)
         elif type == u'Health':
-            Health += value * percentage
+            Health += p_value * percentage
             # print "Health: " + str(Health)
         elif type == u'Telecommunications':
-            Telecommunications += value * percentage
+            Telecommunications += p_value * percentage
             # print "Telecommunications: " + str(Telecommunications)
         elif type == u'Materials':
-            Materials += value * percentage
+            Materials += p_value * percentage
             # print "Materials: " + str(Materials)
         elif type == u'Utilities':
-            Utilities += value * percentage
+            Utilities += p_value * percentage
             # print "Utilities: " + str(Utilities)
     time.sleep(1)
 
@@ -119,4 +122,3 @@ sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
 pprint(sorted_dic)
 with open("output/output.json", "w") as js:
     json.dump(sorted_dic, js)
-print "All done"
