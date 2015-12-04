@@ -78,6 +78,10 @@ while True:
     match = re.search('\<h2\>([0-9]*.)', res.text)
     if match:
         value = match.group(0)
+        if value[-1] == 'M':
+            p_value = float(value[4:-1]) / 1000
+        else:
+            p_value = float(value[4:-1])
     else:
         value = "not get Portfolio Value"
 
@@ -90,6 +94,6 @@ while True:
 
     # final result
     print name
-    print "Portfolio Value: " + str(value[4:-1]) + " billions"
+    print "Portfolio Value: " + str(p_value) + " billions"
     for i in range(int(len(m3)/2)):
         print (m3[2*i][1:-1], round(float(m3[2*i + 1]), 2))
