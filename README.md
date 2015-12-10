@@ -2,7 +2,7 @@
 # Purpose
 	crawl the data of http://www.ibillionaire.me/billionaires/
 	v1: input a number to get each billionaire investor's portfolio, such as Warren Buffett = 0
-	v2: based on stock types to get a summary of all billionaire investors' portfolio, export to json
+	v2: crawl date at first, so user can decide to continue or not, based on stock types to get a summary of all billionaire investors' portfolio, export to json named by date
 # User Statement
 	When you use , you agree to all of the results must be responsible for your own
 # Install
@@ -14,7 +14,7 @@
 
 # Execution
 	V1: input a number 0 ~ 15, other parameters will quit
-	V2: output a json file
+	V2: input y when ask "Continue?", then output a json file named by date
 
 ### Start
   - python ETF_trading_system.py
