@@ -71,7 +71,7 @@ while True:
     try:
         res = requests.get(url, verify=False, headers=header)
     except Exception as e:
-        print "Exception: " + str(e)
+        print "Opening web-page occurs Exception: " + str(e)
         quit()
 
     # use bs4 to extract Portfolio date
