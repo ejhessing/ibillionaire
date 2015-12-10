@@ -74,12 +74,12 @@ while True:
         print "Exception: " + str(e)
         quit()
 
-    # use bs4 to extract date
+    # use bs4 to extract Portfolio date
     soup = BeautifulSoup(res.content, "html.parser")
     spans = []
     for span in soup.find_all('span'):
         spans.append(span.text)
-    date = spans[4]
+    date = spans[4][10:]
     # use re to extract Portfolio Value
     match = re.search('\<h2\>([0-9]*.)', res.text)
     if match:
@@ -104,7 +104,7 @@ while True:
 
     # final result
     print ""
-    print "Date: " + spans[4][10:]
+    print "Portfolio Date: " + date
     print "Name: " + name
     print "Portfolio Value: " + str(p_value) + " billions"
     for i in range(int(len(m3)/2)):
