@@ -49,12 +49,18 @@ Portfolio = [ConsumerStaples, Financials, Technology, ConsumerDiscretionary, Ene
              ]
 
 # use bs4 to extract date
-res = requests.get(urls[0], verify=False, headers=header)
+try:
+    res = requests.get(urls[0], verify=False, headers=header)
+except Exception as e:
+    print "Check Portfolio Date occurs Exception: " + str(e)
+    quit()
 soup = BeautifulSoup(res.content, "html.parser")
+
 spans = []
 for span in soup.find_all('span'):
     spans.append(span.text)
 date = spans[4][10:]
+
 print "Portfolio Date: " + date
 print "Continue? (y = yes, empty or others will exit)"
 go = raw_input("")
@@ -62,14 +68,16 @@ if go != 'y':
     print "you input " + str(go)
     print "bye bye!"
     quit()
-print "this will take some minutes..."
+print "Roger that! This will take some minutes..."
+print ""
 
 for i in range(0, len(urls)):
     # sometimes connection will be rejected, need error handle
     try:
         res = requests.get(urls[i], verify=False, headers=header)
     except Exception as e:
-        print "Exception: " + str(e)
+        print "Get data occurs Exception: " + str(e)
+        print res.url
         quit()
 
     # user re to retract Portfolio Value
@@ -142,3 +150,5 @@ pprint(sorted_dic)
 # save to json , name by date
 with open("output/" + date + ".json", "w") as js:
     json.dump(sorted_dic, js)
+print ""
+print "Tango Down."
