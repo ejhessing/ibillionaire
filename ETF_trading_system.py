@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import requests
-
+from bs4 import BeautifulSoup
 
 header = {
     'cookie': '__utmt=1; _hjUserId=616c6415-761e-30fa-b733-1652b38ca9b2; csrftoken=yyhYiazr254BNO8XYYB166LtfZePf2kc; __utma=94914500.1425706763.1448673958.1448673958.1448673958.1; __utmb=94914500.2.10.1448673958; __utmc=94914500; __utmz=94914500.1448673958.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)',
@@ -74,7 +74,13 @@ while True:
         print "Exception: " + str(e)
         quit()
 
-    # user re to retract Portfolio Value
+    # use bs4 to extract date
+    soup = BeautifulSoup(res.content, "html.parser")
+    spans = []
+    for span in soup.find_all('span'):
+        spans.append(span.text)
+    date = spans[4]
+    # use re to extract Portfolio Value
     match = re.search('\<h2\>([0-9]*.)', res.text)
     if match:
         value = match.group(0)
@@ -97,7 +103,10 @@ while True:
     m3 = m2.split(",")
 
     # final result
-    print name
+    print ""
+    print "Date: " + spans[4][10:]
+    print "Name: " + name
     print "Portfolio Value: " + str(p_value) + " billions"
     for i in range(int(len(m3)/2)):
         print (m3[2*i][1:-1], round(float(m3[2*i + 1]), 2))
+    print ""
