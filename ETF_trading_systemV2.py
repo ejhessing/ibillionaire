@@ -6,6 +6,7 @@ import time
 import json
 import operator
 from pprint import pprint
+from bs4 import BeautifulSoup
 
 if not os.path.exists("output"):
     os.mkdir("output")
@@ -47,6 +48,20 @@ Portfolio = [ConsumerStaples, Financials, Technology, ConsumerDiscretionary, Ene
              Telecommunications, Materials, Utilities
              ]
 
+# use bs4 to extract date
+res = requests.get(urls[0], verify=False, headers=header)
+soup = BeautifulSoup(res.content, "html.parser")
+spans = []
+for span in soup.find_all('span'):
+    spans.append(span.text)
+date = spans[4][10:]
+print "Portfolio Date: " + date
+print "Continue? (y = yes, empty or others will exit)"
+go = raw_input("")
+if go != 'y':
+    print "you input " + str(go)
+    print "bye bye!"
+    quit()
 print "this will take some minutes..."
 
 for i in range(0, len(urls)):
@@ -123,5 +138,7 @@ dic = {"ConsumerStaples": ConsumerStaples / 100, "Financials": Financials / 100,
        }
 sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
 pprint(sorted_dic)
-with open("output/output.json", "w") as js:
+
+# save to json , name by date
+with open("output/" + date + ".json", "w") as js:
     json.dump(sorted_dic, js)
