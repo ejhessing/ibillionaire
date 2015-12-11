@@ -59,21 +59,42 @@ urls = ["http://www.dataroma.com/m/holdings.php?m=AIM",
         "http://www.dataroma.com/m/holdings.php?m=PI",
         "http://www.dataroma.com/m/holdings.php?m=FFH",
         "http://www.dataroma.com/m/holdings.php?m=pzfvx",
+        "http://www.dataroma.com/m/holdings.php?m=SEQUX",
+        "http://www.dataroma.com/m/holdings.php?m=OFALX",
+        "http://www.dataroma.com/m/holdings.php?m=jensx",
+        "http://www.dataroma.com/m/holdings.php?m=muhlx",
+        "http://www.dataroma.com/m/holdings.php?m=lmvtx",
+        "http://www.dataroma.com/m/holdings.php?m=BAUPOST",
+        "http://www.dataroma.com/m/holdings.php?m=LPC",
+        "http://www.dataroma.com/m/holdings.php?m=FPACX",
+        "http://www.dataroma.com/m/holdings.php?m=MKL",
+        "http://www.dataroma.com/m/holdings.php?m=GR",
+        "http://www.dataroma.com/m/holdings.php?m=TWEBX",
+        "http://www.dataroma.com/m/holdings.php?m=WVALX",
+        "http://www.dataroma.com/m/holdings.php?m=brk",
+        "http://www.dataroma.com/m/holdings.php?m=t2",
+        "http://www.dataroma.com/m/holdings.php?m=MPGFX",
+        "http://www.dataroma.com/m/holdings.php?m=TVAFX",
+        "http://www.dataroma.com/m/holdings.php?m=cc"
         ]
 
 # Portfolio
-ConsumerStaples = 0
+ConsumerGoods = 0
 Financials = 0
+InformationTechnology = 0
 Technology = 0
 ConsumerDiscretionary = 0
 Energy = 0
 Industrials = 0
-Health = 0
-Telecommunications = 0
+HealthCare = 0
+TelecommunicationsService = 0
 Materials = 0
 Utilities = 0
-Portfolio = [ConsumerStaples, Financials, Technology, ConsumerDiscretionary, Energy, Industrials, Health,
-             Telecommunications, Materials, Utilities
+Services = 0
+IndustrialGoods = 0
+ConsumerStaples = 0
+Portfolio = [ConsumerGoods, Financials, InformationTechnology, Technology, ConsumerDiscretionary, Energy, Industrials,
+             HealthCare, TelecommunicationsService, Materials, Utilities, Services, IndustrialGoods, ConsumerStaples
              ]
 
 # use bs4 to extract date
@@ -87,7 +108,7 @@ soup = BeautifulSoup(res.content, "html.parser")
 spans = []
 for span in soup.find_all('span'):
     spans.append(span.text)
-date = spans[4][10:]
+date = spans[1]
 
 print "Portfolio Date: " + date
 print "Continue? (y = yes, empty or others will exit)"
@@ -99,7 +120,7 @@ if go != 'y':
 print "Roger that! This will take some minutes..."
 print ""
 
-for i in range(0, len(urls)):
+for i in range(0, 1):
     # sometimes connection will be rejected, need error handle
     try:
         res = requests.get(urls[i], verify=False, headers=header)
@@ -109,74 +130,79 @@ for i in range(0, len(urls)):
         quit()
 
     # user re to retract Portfolio Value
-    match = re.search('\<h2\>([0-9]*.)', res.text)
-    if match:
-        value_str = match.group(0)
-        if value_str[-1] == 'M':
-            p_value = float(value_str[4:-1]) / 1000
-        elif value_str[-1] == 'B':
-            p_value = float(value_str[4:-1])
-        else:
-            print "not get Portfolio Value"
-            p_value = 0
-    else:
-        print "not get Portfolio Value"
-        p_value = 0
+    spans = []
+    for span in soup.find_all('span'):
+        spans.append(span.text)
+    p_value = float(spans[3][1:].replace(",", ""))
+    print p_value
 
-    # use re to extract types and percentages
-    m = re.search("data: eval\('\[(.*)\]'", res.text)
-    # clean space and remove []
-    m2 = m.group(1).replace(" ", "").replace("[", "").replace("]", "")
-    # split string by "," and transform to list
-    m3 = m2.split(",")
+    # use BS4 to extract types and percentages
+    div = soup.find_all(id='sect')
+    data = []
+    for trs in div:
+        for td in trs.find_all('td'):
+            data.append(td.text)
+    print data
 
-    for i in range(int(len(m3) / 2)):
-        type = m3[2 * i][1:-1]
-        percentage = round(float(m3[2 * i + 1]), 2)
+    for i in range(0, len(data)/3):
+        sector = data[i*3]
+        percentage = float(data[i*3+1])
 
-        if type == u'ConsumerStaples':
-            ConsumerStaples += p_value * percentage
-            # print "ConsumerStaples: " + str(ConsumerStaples)
-        elif type == u'Financials':
+        if sector == u'Consumer Goods':
+            ConsumerGoods += p_value * percentage
+            print "Consumer Goods: " + str(ConsumerGoods)
+        elif sector == u'Financials':
             Financials += p_value * percentage
-            # print "Financials: " + str(Financials)
-        elif type == u'Technology':
+            print "Financials: " + str(Financials)
+        elif sector == u'Information Technology':
+            InformationTechnology += p_value * percentage
+            print "Information Technology: " + str(InformationTechnology)
+        elif sector == u'Technology':
             Technology += p_value * percentage
-            # print "Technology: " + str(Technology)
-        elif type == u'ConsumerDiscretionary':
+            print "Technology: " + str(Technology)
+        elif sector == u'Consumer Discretionary':
             ConsumerDiscretionary += p_value * percentage
-            # print "ConsumerDiscretionary: " + str(ConsumerDiscretionary)
-        elif type == u'Energy':
+            print "Consumer Discretionary: " + str(ConsumerDiscretionary)
+        elif sector == u'Energy':
             Energy += p_value * percentage
-            # print "Energy: " + str(Energy)
-        elif type == u'Industrials':
+            print "Energy: " + str(Energy)
+        elif sector == u'Industrials':
             Industrials += p_value * percentage
-            # print "Industrials: " + str(Industrials)
-        elif type == u'Health':
-            Health += p_value * percentage
-            # print "Health: " + str(Health)
-        elif type == u'Telecommunications':
-            Telecommunications += p_value * percentage
-            # print "Telecommunications: " + str(Telecommunications)
-        elif type == u'Materials':
+            print "Industrials: " + str(Industrials)
+        elif sector == u'HealthCare':
+            HealthCare += p_value * percentage
+            print "Health Care: " + str(HealthCare)
+        elif sector == u'Telecommunications Service':
+            TelecommunicationsService += p_value * percentage
+            print "Telecommunications Service: " + str(TelecommunicationsService)
+        elif sector == u'Materials':
             Materials += p_value * percentage
-            # print "Materials: " + str(Materials)
-        elif type == u'Utilities':
+            print "Materials: " + str(Materials)
+        elif sector == u'Utilities':
             Utilities += p_value * percentage
-            # print "Utilities: " + str(Utilities)
+            print "Utilities: " + str(Utilities)
+        elif sector == u'ConsumerStaples':
+            ConsumerStaples += p_value * percentage
+            print "ConsumerStaples: " + str(ConsumerStaples)
+        elif sector == u'Service':
+            Services += p_value * percentage
+            print "Service: " + str(Services)
+
     time.sleep(1)
 
 # save to dict
-dic = {"ConsumerStaples": ConsumerStaples / 100, "Financials": Financials / 100, "Technology": Technology / 100,
-       "ConsumerDiscretionary": ConsumerDiscretionary / 100, "Energy": Energy / 100, "Industrials": Industrials / 100,
-       "Health": Health / 100, "Telecommunications": Telecommunications / 100, "Materials": Materials / 100,
+dic = {"Consumer Goods": ConsumerGoods / 100, "Financials": Financials / 100, "Technology": Technology / 100,
+       "Information Technology": InformationTechnology / 100, "ConsumerDiscretionary": ConsumerDiscretionary / 100,
+       "Energy": Energy / 100, "Industrials": Industrials / 100, "Health Care": HealthCare / 100,
+       "Telecommunications Service": TelecommunicationsService / 100,
+       "Materials": Materials / 100,
        "Utilities": Utilities / 100
        }
 sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
 pprint(sorted_dic)
 
 # save to json , name by date
-with open("output/" + date + ".json", "w") as js:
+with open("output/dataroma: " + date + ".json", "w") as js:
     json.dump(sorted_dic, js)
 print ""
 print "Tango Down."
