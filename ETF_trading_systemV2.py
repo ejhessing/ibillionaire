@@ -148,7 +148,7 @@ sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
 pprint(sorted_dic)
 
 # save to json , name by date
-with open("output/" + date + ".json", "w") as js:
+with open("output/ibillionaire: " + date + ".json", "w") as js:
     json.dump(sorted_dic, js)
 print ""
 print "Tango Down."
