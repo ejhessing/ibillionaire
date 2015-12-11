@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
 import requests
 import os
 import time
@@ -99,11 +98,11 @@ Portfolio = [ConsumerGoods, Financials, InformationTechnology, Technology, Consu
 
 # use bs4 to extract date
 try:
-    res = requests.get(urls[0], verify=False, headers=header)
+    res0 = requests.get(urls[0], verify=False, headers=header)
 except Exception as e:
     print "Check Portfolio Date occurs Exception: " + str(e)
     quit()
-soup = BeautifulSoup(res.content, "html.parser")
+soup = BeautifulSoup(res0.content, "html.parser")
 
 spans = []
 for span in soup.find_all('span'):
@@ -120,7 +119,7 @@ if go != 'y':
 print "Roger that! This will take some minutes..."
 print ""
 
-for i in range(0, 1):
+for i in range(0, len(urls)):
     # sometimes connection will be rejected, need error handle
     try:
         res = requests.get(urls[i], verify=False, headers=header)
@@ -183,20 +182,22 @@ for i in range(0, 1):
             print "Utilities: " + str(Utilities)
         elif sector == u'ConsumerStaples':
             ConsumerStaples += p_value * percentage
-            print "ConsumerStaples: " + str(ConsumerStaples)
+            print "Consumer Staples: " + str(ConsumerStaples)
         elif sector == u'Service':
             Services += p_value * percentage
             print "Service: " + str(Services)
-
+        elif sector == u'Industrial Goods':
+            IndustrialGoods += p_value * percentage
+            print "Industrial Goods: " + str(IndustrialGoods)
     time.sleep(1)
 
 # save to dict
-dic = {"Consumer Goods": ConsumerGoods / 100, "Financials": Financials / 100, "Technology": Technology / 100,
-       "Information Technology": InformationTechnology / 100, "ConsumerDiscretionary": ConsumerDiscretionary / 100,
-       "Energy": Energy / 100, "Industrials": Industrials / 100, "Health Care": HealthCare / 100,
-       "Telecommunications Service": TelecommunicationsService / 100,
-       "Materials": Materials / 100,
-       "Utilities": Utilities / 100
+dic = {"Consumer Goods": ConsumerGoods / 10000000, "Financials": Financials / 10000000, "Technology": Technology / 10000000,
+       "Information Technology": InformationTechnology / 10000000, "ConsumerDiscretionary": ConsumerDiscretionary / 10000000,
+       "Energy": Energy / 10000000, "Industrials": Industrials / 10000000, "Health Care": HealthCare / 10000000,
+       "Telecommunications Service": TelecommunicationsService / 10000000, "Materials": Materials / 10000000,
+       "Utilities": Utilities / 10000000, "Consumer Staples": ConsumerStaples / 10000000, "Service": Services / 10000000,
+       "Industrial Goods": IndustrialGoods / 10000000
        }
 sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
 pprint(sorted_dic)
