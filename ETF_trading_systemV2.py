@@ -75,9 +75,10 @@ for i in range(0, len(urls)):
     # sometimes connection will be rejected, need error handle
     try:
         res = requests.get(urls[i], verify=False, headers=header)
+        print urls[i]
     except Exception as e:
         print "Get data occurs Exception: " + str(e)
-        print res.url
+        print urls[i]
         quit()
 
     # user re to retract Portfolio Value
@@ -108,34 +109,35 @@ for i in range(0, len(urls)):
 
         if type == u'ConsumerStaples':
             ConsumerStaples += p_value * percentage
-            # print "ConsumerStaples: " + str(ConsumerStaples)
+            print "ConsumerStaples: " + str(ConsumerStaples)
         elif type == u'Financials':
             Financials += p_value * percentage
-            # print "Financials: " + str(Financials)
+            print "Financials: " + str(Financials)
         elif type == u'Technology':
             Technology += p_value * percentage
-            # print "Technology: " + str(Technology)
+            print "Technology: " + str(Technology)
         elif type == u'ConsumerDiscretionary':
             ConsumerDiscretionary += p_value * percentage
-            # print "ConsumerDiscretionary: " + str(ConsumerDiscretionary)
+            print "ConsumerDiscretionary: " + str(ConsumerDiscretionary)
         elif type == u'Energy':
             Energy += p_value * percentage
-            # print "Energy: " + str(Energy)
+            print "Energy: " + str(Energy)
         elif type == u'Industrials':
             Industrials += p_value * percentage
-            # print "Industrials: " + str(Industrials)
+            print "Industrials: " + str(Industrials)
         elif type == u'Health':
             Health += p_value * percentage
-            # print "Health: " + str(Health)
+            print "Health: " + str(Health)
         elif type == u'Telecommunications':
             Telecommunications += p_value * percentage
-            # print "Telecommunications: " + str(Telecommunications)
+            print "Telecommunications: " + str(Telecommunications)
         elif type == u'Materials':
             Materials += p_value * percentage
-            # print "Materials: " + str(Materials)
+            print "Materials: " + str(Materials)
         elif type == u'Utilities':
             Utilities += p_value * percentage
-            # print "Utilities: " + str(Utilities)
+            print "Utilities: " + str(Utilities)
+    print ""
     time.sleep(1)
 
 # save to dict
