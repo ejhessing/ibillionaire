@@ -104,7 +104,7 @@ for i in range(0, len(urls)):
 
     for i in range(int(len(m3) / 2)):
         type = m3[2 * i][1:-1]
-        percentage = round(float(m3[2 * i + 1]), 2)
+        percentage = round(float(m3[2 * i + 1]), 2) / 100
 
         if type == u'ConsumerStaples':
             ConsumerStaples += p_value * percentage
@@ -139,10 +139,10 @@ for i in range(0, len(urls)):
     time.sleep(1)
 
 # save to dict
-dic = {"ConsumerStaples": ConsumerStaples / 100, "Financials": Financials / 100, "Technology": Technology / 100,
-       "ConsumerDiscretionary": ConsumerDiscretionary / 100, "Energy": Energy / 100, "Industrials": Industrials / 100,
-       "Health": Health / 100, "Telecommunications": Telecommunications / 100, "Materials": Materials / 100,
-       "Utilities": Utilities / 100
+dic = {"ConsumerStaples": ConsumerStaples, "Financials": Financials, "Technology": Technology,
+       "ConsumerDiscretionary": ConsumerDiscretionary, "Energy": Energy, "Industrials": Industrials,
+       "Health": Health, "Telecommunications": Telecommunications, "Materials": Materials,
+       "Utilities": Utilities
        }
 sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
 pprint(sorted_dic)
