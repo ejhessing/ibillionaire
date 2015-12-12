@@ -86,30 +86,30 @@ ConsumerDiscretionary = 0
 Energy = 0
 Industrials = 0
 HealthCare = 0
-TelecommunicationsService = 0
+TelecommunicationsServices = 0
 Materials = 0
 Utilities = 0
 Services = 0
 IndustrialGoods = 0
 ConsumerStaples = 0
 Portfolio = [ConsumerGoods, Financials, InformationTechnology, Technology, ConsumerDiscretionary, Energy, Industrials,
-             HealthCare, TelecommunicationsService, Materials, Utilities, Services, IndustrialGoods, ConsumerStaples
+             HealthCare, TelecommunicationsServices, Materials, Utilities, Services, IndustrialGoods, ConsumerStaples
              ]
 
 # use bs4 to extract date
 try:
-    res0 = requests.get(urls[0], verify=False, headers=header)
+    res = requests.get(urls[0], verify=False, headers=header)
 except Exception as e:
     print "Check Portfolio Date occurs Exception: " + str(e)
     quit()
-soup = BeautifulSoup(res0.content, "html.parser")
 
+soup = BeautifulSoup(res.content, "html.parser")
 spans = []
 for span in soup.find_all('span'):
     spans.append(span.text)
 date = spans[1]
-
 print "Portfolio Date: " + date
+
 print "Continue? (y = yes, empty or others will exit)"
 go = raw_input("")
 if go != 'y':
@@ -122,18 +122,30 @@ print ""
 for i in range(0, len(urls)):
     # sometimes connection will be rejected, need error handle
     try:
+        print urls[i]
         res = requests.get(urls[i], verify=False, headers=header)
     except Exception as e:
         print "Get data occurs Exception: " + str(e)
-        print res.url
+        print urls[i]
         quit()
-
-    # user re to retract Portfolio Value
-    spans = []
+    soup = BeautifulSoup(res.content, "html.parser")
+    # user bs4 to retract Portfolio Value
+    # clean out list
+    spans[:] = []
     for span in soup.find_all('span'):
         spans.append(span.text)
-    p_value = float(spans[3][1:].replace(",", ""))
-    print p_value
+    try:
+        p_value = float(spans[3][1:].replace(",", "")) / 1000000000
+    except ValueError:
+        # if not get the Portfolio Value, try another location
+        try:
+            p_value = float(spans[5][1:].replace(",", "")) / 1000000000
+        except ValueError:
+            print "get Portfolio Value fail, only got:"
+            print spans[5][1:].replace(",", "")
+            print "exit..."
+            exit()
+    print str(p_value) + "B"
 
     # use BS4 to extract types and percentages
     div = soup.find_all(id='sect')
@@ -141,11 +153,10 @@ for i in range(0, len(urls)):
     for trs in div:
         for td in trs.find_all('td'):
             data.append(td.text)
-    print data
 
     for i in range(0, len(data)/3):
         sector = data[i*3]
-        percentage = float(data[i*3+1])
+        percentage = float(data[i*3+1]) / 100
 
         if sector == u'Consumer Goods':
             ConsumerGoods += p_value * percentage
@@ -168,36 +179,36 @@ for i in range(0, len(urls)):
         elif sector == u'Industrials':
             Industrials += p_value * percentage
             print "Industrials: " + str(Industrials)
-        elif sector == u'HealthCare':
+        elif sector == u'Health Care':
             HealthCare += p_value * percentage
             print "Health Care: " + str(HealthCare)
-        elif sector == u'Telecommunications Service':
-            TelecommunicationsService += p_value * percentage
-            print "Telecommunications Service: " + str(TelecommunicationsService)
+        elif sector == u'Telecommunications Services':
+            TelecommunicationsServices += p_value * percentage
+            print "Telecommunications Services: " + str(TelecommunicationsServices)
         elif sector == u'Materials':
             Materials += p_value * percentage
             print "Materials: " + str(Materials)
         elif sector == u'Utilities':
             Utilities += p_value * percentage
             print "Utilities: " + str(Utilities)
-        elif sector == u'ConsumerStaples':
+        elif sector == u'Consumer Staples':
             ConsumerStaples += p_value * percentage
             print "Consumer Staples: " + str(ConsumerStaples)
-        elif sector == u'Service':
+        elif sector == u'Services':
             Services += p_value * percentage
-            print "Service: " + str(Services)
+            print "Services: " + str(Services)
         elif sector == u'Industrial Goods':
             IndustrialGoods += p_value * percentage
             print "Industrial Goods: " + str(IndustrialGoods)
     time.sleep(1)
 
 # save to dict
-dic = {"Consumer Goods": ConsumerGoods / 10000000, "Financials": Financials / 10000000, "Technology": Technology / 10000000,
-       "Information Technology": InformationTechnology / 10000000, "ConsumerDiscretionary": ConsumerDiscretionary / 10000000,
-       "Energy": Energy / 10000000, "Industrials": Industrials / 10000000, "Health Care": HealthCare / 10000000,
-       "Telecommunications Service": TelecommunicationsService / 10000000, "Materials": Materials / 10000000,
-       "Utilities": Utilities / 10000000, "Consumer Staples": ConsumerStaples / 10000000, "Service": Services / 10000000,
-       "Industrial Goods": IndustrialGoods / 10000000
+dic = {"Consumer Goods": ConsumerGoods, "Financials": Financials, "Technology": Technology,
+       "Information Technology": InformationTechnology, "ConsumerDiscretionary": ConsumerDiscretionary,
+       "Energy": Energy, "Industrials": Industrials, "Health Care": HealthCare,
+       "Telecommunications Services": TelecommunicationsServices, "Materials": Materials,
+       "Utilities": Utilities, "Consumer Staples": ConsumerStaples, "Service": Services,
+       "Industrial Goods": IndustrialGoods
        }
 sorted_dic = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
 pprint(sorted_dic)
